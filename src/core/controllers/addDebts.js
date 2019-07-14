@@ -1,11 +1,16 @@
 const addDebitsModel = require('../models/addDebts.js');
 module.exports = addDebts;
 function addDebts(req,res){
+    console.log('addDebts body ->', req.body, typeof req.body.reason)
     if(!verifyParams(req.body)){
         return res.status(400).send({error:'INVALID_PARAMS'})
     }
     let context = {
         idUser : req.body.idUser,
+        value: req.body.value,
+        reason: req.body.reason,
+        details: {},
+        dateDebtor:req.body.dateDebtor,
     }
 
     addDebitsModel(context,(dataReturned)=>{
@@ -24,7 +29,7 @@ function addDebts(req,res){
  */
 function verifyParams(params){
     if(isNaN(params.idUser) || isNaN(params.value)) return false;
-    if(typeof params.reason == 'string') return false;
+    if(typeof params.reason != 'string') return false;
     if(params.dateDebtor == undefined) return false;
     return true;
 }

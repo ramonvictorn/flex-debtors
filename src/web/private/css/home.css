@@ -1,0 +1,22 @@
+.input{
+    width: 100%;
+}
+
+.select {
+    z-index: 999;
+    position: relative;
+}
+
+.headTable{
+    background-color: blue;
+    font-size: 19px;
+}
+
+
+.inputCustom{
+    border: 0;
+    outline: 0;
+    border-bottom: 2px solid blue;
+}
+
+

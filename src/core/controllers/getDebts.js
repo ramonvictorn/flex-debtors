@@ -1,11 +1,12 @@
 const getDebitsModel = require('../models/getDebts.js');
 module.exports = getDebts;
 function getDebts(req,res){
-    if(!verifyParams(req.body)){
+    console.log('paras ', req.query)
+    if(!verifyParams(req.query)){
         return res.status(400).send({error:'INVALID_PARAMS'})
     }
     let context = {
-        idUser : req.body.idUser,
+        idUser : parseInt(req.query.idUser),
     }
 
     getDebitsModel(context,(dataReturned)=>{

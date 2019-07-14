@@ -6,7 +6,7 @@ exports.init = init
 //controllers
 const getUsersController = require('./controllers/getUsers.js');
 const getDebtsController = require('./controllers/getDebts.js');
-
+const addDebtsController = require('./controllers/addDebts.js');
 
 function init(app){
     app.get('/ping', (req,res)=>{
@@ -16,4 +16,5 @@ function init(app){
     
     app.get('/users' , getUsersController);
     app.get('/debts', getDebtsController);
+    app.post('/debts', addDebtsController);
 }
