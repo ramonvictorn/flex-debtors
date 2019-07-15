@@ -3,27 +3,23 @@ import { connect } from 'react-redux';
 import {
     toggleRowEdit,
     updateDebtorsList,
+    updateTableInputValues,
+    setTableInputValues,
 } from '../Actions/debtors.js';
 
 class InputActions extends Component{
     constructor(){
         super();
-        this.state = {
-            reason : '',
-            value : '',
-            dateDebtor : '',
-        }
         this.cadastrar = this.cadastrar.bind(this);
+        this.updateValues = this.updateValues.bind(this);
     }
     cadastrar(){
-        // console.log('cadastrar', this.props.userSelected);
         let data ={
             idUser: this.props.userSelected.id,
-            reason: this.state.reason,
-            value: this.state.value,
-            dateDebtor:this.state.dateDebtor,
+            reason: this.props.inputValues.reason,
+            value: this.props.inputValues.value,
+            dateDebtor:this.props.inputValues.dateDebtor,
         }
-        // console.log('antes do send ', data.dateDebtor)
         let me = this;
         $.ajax({
             url: "/debts",
@@ -35,12 +31,20 @@ class InputActions extends Component{
               me.props._toggleRowEdit();
           });
     }
+    updateValues(value,param){
+        let dataParams = {
+            input: param,
+            value: value,
+        };
+        this.props._updateTableInputValues(dataParams)
+    }
     render(){
+        console.log('InputAction render ', this.props)
         return(
             <tr>
-                <td>{<input className={'inputCustom'}  onChange={(e)=>{this.setState({reason:e.target.value})}} type="text" placeholder="Qual o motivo da divída?"></input>}</td>
-                <td>{<input className={'inputCustom'} onChange={(e)=>{this.setState({value:e.target.value})}} type="number" placeholder="Qual foi o valor?"></input>}</td>
-                <td>{<input className={'inputCustom'} onChange={(e)=>{this.setState({dateDebtor:e.target.value})}} type="date" placeholder="Quando foi?"></input>}</td>
+                <td>{<input className={'inputCustom'}  onChange={(e)=>{this.updateValues(e.target.value,'reason')}} type="text" placeholder="Qual o motivo da divída?" value={this.props.inputValues.reason}></input>}</td>
+                <td>{<input className={'inputCustom'} onChange={(e)=>{this.updateValues(e.target.value,'value')}} type="number" placeholder="Qual foi o valor?" value={this.props.inputValues.value}></input>}</td>
+                <td>{<input className={'inputCustom'} onChange={(e)=>{this.updateValues(e.target.value,'dateDebtor')}} type="date" placeholder="Quando foi?" value={this.props.inputValues.dateDebtor}></input>}</td>
                 <td></td>
                 <td onClick={this.cadastrar}>Cadastrar</td>
             </tr>
@@ -52,12 +56,15 @@ const mapStateToProps = state => ({
     userSelected: state.usersReducer.userSelected,
     // usersList: state.usersReducer.usersList,
     debtorsList: state.debtorsReducer.debtorsList,
-    rowEdit : state.debtorsReducer.rowEdit
+    rowEdit : state.debtorsReducer.rowEdit,
+    inputValues: state.debtorsReducer.inputValues,
 });
 
 const mapDispatchToProps = dispatch =>({
     _toggleRowEdit: () => dispatch(toggleRowEdit()),
-    _updateDebtorsList: list => dispatch(updateDebtorsList(list))
+    _updateDebtorsList: list => dispatch(updateDebtorsList(list)),
+    _updateTableInputValues : objectValues => dispatch(updateTableInputValues(objectValues)),
+    _setTableInputValues : objectValues => dispatch(setTableInputValues(objectValues)),
 });
 
 export default connect(mapStateToProps,mapDispatchToProps)(InputActions);
