@@ -1,6 +1,8 @@
 import React,{Component} from 'react';
 import Select from 'react-select';
 import { connect } from 'react-redux';
+// import { AccessAlarm, ThreeDRotation } from '@material-ui/icons';
+import Icon from '@material-ui/core/Icon';
 import {
     updateDebtorsList,
     toggleRowEdit,
@@ -86,10 +88,10 @@ class ListDebts extends Component{
                             <td>{new Date(element.dateDebtor).toDateString("yyyy-MM-dd")}</td>
                             <td>
                                 <h2 onClick={()=>this.editDebt(element.idDebtor,index)}>
-                                    editar
+                                    <Icon>border_color</Icon>
                                 </h2>
                                 <h2 onClick={()=>this.delete(element.idDebtor)}>
-                                    delete
+                                    <Icon>delete</Icon>
                                 </h2>
                             </td>
                         </tr>
@@ -99,6 +101,9 @@ class ListDebts extends Component{
         lines.length == 0 ? notFound = "Nenhuma divída encontrada" : '';
         let inputAc = this.props.rowEdit ? <InputActions></InputActions> : <tr></tr>
         let disable = this.props.idEdit != undefined ? 'true' : 'false';
+        console.log('idEdit ', this.props.idEdit)
+        let btNewClass = this.props.idEdit != undefined ? 'editing' : 'notEding2';
+        let btNewTxt = "Novo Cadastro";
         return(
             <React.Fragment>
                 <table border="1" className={'tableStyle'}>
@@ -108,7 +113,7 @@ class ListDebts extends Component{
                             <td>Valor </td>
                             <td>Data</td>
                             <td>Ações</td>
-                            <td  onClick={()=>{this.addNewRegistry()}}> bloqeuado? {disable}Novo registro</td></tr>
+                            <td  onClick={()=>{this.addNewRegistry()}}><h2 className={btNewClass}>{btNewTxt}</h2></td></tr>
                         {lines}
                         {inputAc}
 

@@ -17,11 +17,11 @@ class Home extends Component {
         this.props.userSelected == null ? ListDebtsComponent = "Selecione um cliente para visualizar suas divídas" : '';
         return(
             <React.Fragment>
-                <Container maxWidth="sm">
+                {/* <Container maxWidth="sm"> */}
                     <ListClients></ListClients>
                     {/* <FormDebts></FormDebts> */}
                     {ListDebtsComponent}
-                </Container>
+                {/* </Container> */}
             </React.Fragment>
         )
     }

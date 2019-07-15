@@ -55,15 +55,17 @@ class InputActions extends Component{
 			data: data,
           }).done(function(ret) {
               console.log('ret DO PUT ', ret);
+              console.log('vou procupar pela id ', data.idDebtor)
+              console.log('vou mexer no ->', JSON.stringify(me.props.debtorsList))
               me.props.debtorsList.forEach((element,index) => {
-                if(ret.data.idDebtor == data.idDebtor){
-                    console.log('if do put deu true');
+                if(element.idDebtor == ret.data.idDebtor){
+                    console.log('if do put deu true', JSON.stringify(OldArray[index]));
                     OldArray[index] = ret.data;
                     // console.log('o el ficou ', JSON.stringify(element))
                 }
               });
-              me.props._updateDebtorsList(OldArray);
               me.props._setRowEdit(undefined);
+              me.props._updateDebtorsList(OldArray);
             //   me.props._toggleRowEdit();
             console.log('oldArray ->', JSON.stringify(OldArray))
           });
