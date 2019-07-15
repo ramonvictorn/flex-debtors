@@ -1,29 +1,29 @@
 const db = require('../../db.js')
-module.exports = addDebts;
-function addDebts(context,cb){
+module.exports = deleteDebt;
+function deleteDebt(context,cb){
     let queryWhere = ``;
     let queryValues = [
-        context.idUser,
-        context.reason,
-        context.value,
-        context.details,
-        context.dateDebtor,
+        context.idDebtor,
+        // context.idUser,
+        // context.reason,
+        // context.value,
+        // context.details,
+        // context.dateDebtor,
     ];  
     // extract(epoch from u.date_inserted)*1000 as "dateInserted
-    let queryString = `INSERT INTO debtors
-            (id_user,reason,value,details,date_debtor,date_inserted)
-        VALUES
-            ($1,$2,$3,$4,$5,now())
+    let queryString = `DELETE FROM debtors
+            WHERE
+            id_debtor = $1
         RETURNING 
-            id_user as "idUser",
             id_debtor as "idDebtor",
+            id_user as "idUser",
             reason,
             value,
             date_debtor as "dateDebtor";`;
 
     db.query(queryString,queryValues,(err,result)=>{   
         if(err){
-            cb({error:'ERROR_ON_ADD_DEBTS'})
+            cb({error:'ERROR_ON_DELETE_DEBT'})
         }else{
             cb({data:result.rows[0]})
         }  

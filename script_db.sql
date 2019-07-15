@@ -8,6 +8,6 @@ CREATE TABLE debtors (
 	reason text NOT NULL,
 	value int NOT NULL,
 	details json NOT NULL,
-	date_debtor timestamptz NOT NULL,
+	date_debtor date NOT NULL,
 	date_inserted timestamptz NOT null
 );

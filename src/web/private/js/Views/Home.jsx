@@ -12,9 +12,9 @@ class Home extends Component {
         super();
     }
     render(){
-        console.log('render Home ', this.props.userSelected);
+        console.log('render Home ');
         let ListDebtsComponent = <ListDebts></ListDebts>
-        this.props.userSelected == null ? ListDebtsComponent = "Selecine um client para visualizar suas divídas" : '';
+        this.props.userSelected == null ? ListDebtsComponent = "Selecione um cliente para visualizar suas divídas" : '';
         return(
             <React.Fragment>
                 <Container maxWidth="sm">
