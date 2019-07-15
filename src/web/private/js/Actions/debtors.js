@@ -22,3 +22,9 @@ export const setTableInputValues = (objectValues) => ({
   type:  SET_TABLE_INPUT_VALUES,
   payload : {objectValues}
 });
+
+export const SET_ROW_EDIT = "SET_ROW_EDIT";
+export const setRowEdit = (id) =>({
+  type: SET_ROW_EDIT,
+  payload : {id},
+})

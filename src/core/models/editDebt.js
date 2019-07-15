@@ -7,24 +7,26 @@ function editDebt(context,cb){
     ];  
     if(context.value){
         queryValues.push(context.value)
-        queryValues = ` $${queryValues.length} `;
+        querySet += ` value = $${queryValues.length} `;
     }
     
     if(context.reason){
-        queryValues.push(context.reason)
-        queryValues = ` $${queryValues.length} `;
+        queryValues.length > 1 ? querySet+= ` , `: '';
+        queryValues.push(context.reason);
+        querySet += `reason = $${queryValues.length} `;
     }
 
     if(context.dateDebtor){
+        queryValues.length > 1 ? querySet+= ` , `: '';
         queryValues.push(context.dateDebtor)
-        queryValues = ` $${queryValues.length} `;
+        querySet += ` date_debtor = $${queryValues.length} `;
     }
     
     let queryString = `UPDATE debtors
         SET
             ${querySet}
         WHERE 
-            id_debtor
+            id_debtor = $1
             RETURNING 
             id_debtor as "idDebtor",
             id_user as "idUser",

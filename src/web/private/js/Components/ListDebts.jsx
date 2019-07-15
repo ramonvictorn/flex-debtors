@@ -6,14 +6,12 @@ import {
     toggleRowEdit,
     updateTableInputValues,
     setTableInputValues,
+    setRowEdit,
 } from '../Actions/debtors.js';
 import InputActions from './InputActions.jsx';
 class ListDebts extends Component{
     constructor(){
         super();
-        this.state = {
-            edit : false,
-        }
         this.addNewRegistry = this.addNewRegistry.bind(this);
         this.removeDebtArray = this.removeDebtArray.bind(this);
         this.delete = this.delete.bind(this);
@@ -21,8 +19,8 @@ class ListDebts extends Component{
     }
     delete(id){
         let me = this;
-        console.log('array Before ajax', this.props.debtorsList);
-        console.log('delete ', id);
+        // console.log('array Before ajax', this.props.debtorsList);
+        // console.log('delete ', id);
         let data = {
             idDebtor : id,
         }
@@ -31,15 +29,15 @@ class ListDebts extends Component{
             type:"DELETE",
 			data: data,
           }).done(function(ret) {
-              console.log('ret do delete ', ret)
+            //   console.log('ret do delete ', ret)
               me.removeDebtArray(ret.data.idDebtor)
             //   me.props._updateDebtorsList(me.props.debtorsList.concat(ret.data))
             //   me.props._toggleRowEdit();
           });
     }
     editDebt(idDebt,index){
-        console.log('editDebt ', idDebt, 'e index ->', index);
-        console.log('com essas info', this.props.debtorsList[index])
+        // console.log('editDebt ', idDebt, 'e index ->', index);
+        // console.log('com essas info', this.props.debtorsList[index])
         this.setState({edit:idDebt})
         let dataParams = {
             reason : this.props.debtorsList[index].reason,
@@ -48,47 +46,59 @@ class ListDebts extends Component{
         };
         this.props._setTableInputValues(dataParams);
         // this.props._updateTableInputValues(dataParams)
+        this.props._setRowEdit(idDebt);
 
     }
     removeDebtArray(idDebt){
-        console.log('removeDebtArray -> idDebt', idDebt)
+        // console.log('removeDebtArray -> idDebt', idDebt)
         let newArray = [];
-        console.log('array Before', this.props.debtorsList.length);
+        let tempArray = this.props.debtorsList.slice(0);
+    
+        // console.log('array Before', JSON.stringify(tempArray));
         this.props.debtorsList.forEach((element,index) => {
-            console.log('looping remove',element)
+            // console.log('looping remove',element.idDebtor , 'params é' , idDebt)
             if(element.idDebtor == idDebt){
-                console.log('deu true ', index);
-                newArray = this.props.debtorsList.splice(index+1);
+                // console.log('deu true ', index, tempArray.length);
+                // newArray = this.props.debtorsList.splice(index+1);
+                tempArray.splice(index,1)
             }
         });
-        console.log('array after', newArray);
-        this.props._updateDebtorsList(newArray);
+        // console.log('array after', JSON.stringify(tempArray));
+        this.props._updateDebtorsList(tempArray);
     }
     addNewRegistry(){
-        console.log('addNewRegistry', this.props);
+        // console.log('addNewRegistry', this.props);
         this.props._toggleRowEdit();
     }
     render(){
-        console.log('listDebts render',this.props.debtorsList);
+        console.log('listDebts render - list',this.props.debtorsList);
         let lines = [];
         let notFound = '';
         if(this.props.debtorsList){
             this.props.debtorsList.forEach((element,index) => {
-                // console.log('looping, element ->', element.idDebtor, 'edit state ', this.state.edit);
+                // console.log('looping, element ->', element.idDebtor, 'edit props ', this.props.idEdit);
                 lines.push(
-                    this.state.edit == element.idDebtor 
+                    this.props.idEdit == element.idDebtor 
                     ?   <InputActions key={element.idDebtor}></InputActions>
                     :    <tr key={element.idDebtor} className={'tableLine'}>
                             <td>{element.reason}</td>
                             <td>{element.value}</td>
                             <td>{new Date(element.dateDebtor).toDateString("yyyy-MM-dd")}</td>
-                            <td><h2 onClick={()=>this.editDebt(element.idDebtor,index)}>editar</h2><h2 onClick={()=>this.delete(element.idDebtor)}>delete</h2></td>
+                            <td>
+                                <h2 onClick={()=>this.editDebt(element.idDebtor,index)}>
+                                    editar
+                                </h2>
+                                <h2 onClick={()=>this.delete(element.idDebtor)}>
+                                    delete
+                                </h2>
+                            </td>
                         </tr>
                 )
             });
         }
         lines.length == 0 ? notFound = "Nenhuma divída encontrada" : '';
         let inputAc = this.props.rowEdit ? <InputActions></InputActions> : <tr></tr>
+        let disable = this.props.idEdit != undefined ? 'true' : 'false';
         return(
             <React.Fragment>
                 <table border="1" className={'tableStyle'}>
@@ -98,7 +108,7 @@ class ListDebts extends Component{
                             <td>Valor </td>
                             <td>Data</td>
                             <td>Ações</td>
-                            <td onClick={()=>{this.addNewRegistry()}}>Novo registro</td></tr>
+                            <td  onClick={()=>{this.addNewRegistry()}}> bloqeuado? {disable}Novo registro</td></tr>
                         {lines}
                         {inputAc}
 
@@ -110,20 +120,13 @@ class ListDebts extends Component{
     }
 }
 
-// updateValues(value,param){
-//     let dataParams = {
-//         input : param,
-//         value: value
-//     };
-//     this.props._updateTableInputValues(dataParams)
-// }
-
 const mapStateToProps = state => ({
     userSelected: state.usersReducer.userSelected,
     usersList: state.usersReducer.usersList,
     debtorsList: state.debtorsReducer.debtorsList,
     rowEdit : state.debtorsReducer.rowEdit,
     inputValues: state.debtorsReducer.inputValues,
+    idEdit: state.debtorsReducer.idEdit
 });
 
 const mapDispatchToProps = dispatch =>({
@@ -131,5 +134,6 @@ const mapDispatchToProps = dispatch =>({
     _toggleRowEdit: () => dispatch(toggleRowEdit()),
     _updateTableInputValues : objectValues => dispatch(updateTableInputValues(objectValues)),
     _setTableInputValues : objectValues => dispatch(setTableInputValues(objectValues)),
+    _setRowEdit : id => dispatch(setRowEdit(id)),
 });
 export default connect(mapStateToProps,mapDispatchToProps)(ListDebts);

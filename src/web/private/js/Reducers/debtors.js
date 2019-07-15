@@ -3,12 +3,14 @@ import {
     TOGGLE_ROW_EDIT,
     UPDATE_TABLE_INPUT_VALUES,
     SET_TABLE_INPUT_VALUES,
+    SET_ROW_EDIT,
 } from '../Actions/debtors.js';
 
 
 const initialState = {
     debtorsList: null,
     rowEdit: false,
+    idEdit : undefined,
     inputValues: {
         reason : '',
         value: '',
@@ -29,7 +31,6 @@ const debtorsReducer = (state = initialState, action) => {
                 rowEdit: !state.rowEdit
             }
         case UPDATE_TABLE_INPUT_VALUES:
-                console.log('chegou no reducer do UPDATE_TABLE_INPUT_VALUES', action.payload)
             return{
                 ...state,
                 inputValues : {
@@ -38,10 +39,14 @@ const debtorsReducer = (state = initialState, action) => {
                 },
             }
         case SET_TABLE_INPUT_VALUES:
-            console.log('chegou o set aqui ', action.payload)
             return{
                 ...state,
                 inputValues : action.payload.objectValues,
+            }
+        case SET_ROW_EDIT:
+            return{
+                ...state,
+                idEdit: action.payload.id,
             }
         default:
             return state;

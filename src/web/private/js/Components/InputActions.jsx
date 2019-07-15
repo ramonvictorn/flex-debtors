@@ -5,13 +5,15 @@ import {
     updateDebtorsList,
     updateTableInputValues,
     setTableInputValues,
+    setRowEdit,
 } from '../Actions/debtors.js';
 
 class InputActions extends Component{
     constructor(){
         super();
         this.cadastrar = this.cadastrar.bind(this);
-        this.updateValues = this.updateValues.bind(this);
+        this.updateValuesState = this.updateValuesState.bind(this);
+        this.updateDataRow = this.updateDataRow.bind(this);
     }
     cadastrar(){
         let data ={
@@ -31,26 +33,55 @@ class InputActions extends Component{
               me.props._toggleRowEdit();
           });
     }
-    updateValues(value,param){
+    updateValuesState(value,param){
         let dataParams = {
             input: param,
             value: value,
         };
         this.props._updateTableInputValues(dataParams)
     }
+    updateDataRow(){
+        let data ={
+            idDebtor: this.props.idEdit,
+            reason: this.props.inputValues.reason,
+            value: this.props.inputValues.value,
+            dateDebtor:this.props.inputValues.dateDebtor,
+        }
+        let OldArray = this.props.debtorsList.slice(0);
+        let me = this;
+        $.ajax({
+            url: "/debts",
+            type:"PUT",
+			data: data,
+          }).done(function(ret) {
+              console.log('ret DO PUT ', ret);
+              me.props.debtorsList.forEach((element,index) => {
+                if(ret.data.idDebtor == data.idDebtor){
+                    console.log('if do put deu true');
+                    OldArray[index] = ret.data;
+                    // console.log('o el ficou ', JSON.stringify(element))
+                }
+              });
+              me.props._updateDebtorsList(OldArray);
+              me.props._setRowEdit(undefined);
+            //   me.props._toggleRowEdit();
+            console.log('oldArray ->', JSON.stringify(OldArray))
+          });
+    }
     render(){
         console.log('InputAction render ', this.props)
         return(
             <tr>
-                <td>{<input className={'inputCustom'}  onChange={(e)=>{this.updateValues(e.target.value,'reason')}} type="text" placeholder="Qual o motivo da divída?" value={this.props.inputValues.reason}></input>}</td>
-                <td>{<input className={'inputCustom'} onChange={(e)=>{this.updateValues(e.target.value,'value')}} type="number" placeholder="Qual foi o valor?" value={this.props.inputValues.value}></input>}</td>
-                <td>{<input className={'inputCustom'} onChange={(e)=>{this.updateValues(e.target.value,'dateDebtor')}} type="date" placeholder="Quando foi?" value={this.props.inputValues.dateDebtor}></input>}</td>
+                <td>{<input className={'inputCustom'}  onChange={(e)=>{this.updateValuesState(e.target.value,'reason')}} type="text" placeholder="Qual o motivo da divída?" value={this.props.inputValues.reason}></input>}</td>
+                <td>{<input className={'inputCustom'} onChange={(e)=>{this.updateValuesState(e.target.value,'value')}} type="number" placeholder="Qual foi o valor?" value={this.props.inputValues.value}></input>}</td>
+                <td>{<input className={'inputCustom'} onChange={(e)=>{this.updateValuesState(e.target.value,'dateDebtor')}} type="date" placeholder="Quando foi?" value={this.props.inputValues.dateDebtor}></input>}</td>
                 <td></td>
-                <td onClick={this.cadastrar}>Cadastrar</td>
+                <td> {this.props.idEdit ? <h2 onClick={this.updateDataRow}>Salvar</h2> : <h2 onClick={this.cadastrar}>CADASTRAR</h2>}</td>
             </tr>
         )
     }  
 }
+// updateDataRow
 // export default InputActions;
 const mapStateToProps = state => ({
     userSelected: state.usersReducer.userSelected,
@@ -58,6 +89,7 @@ const mapStateToProps = state => ({
     debtorsList: state.debtorsReducer.debtorsList,
     rowEdit : state.debtorsReducer.rowEdit,
     inputValues: state.debtorsReducer.inputValues,
+    idEdit: state.debtorsReducer.idEdit
 });
 
 const mapDispatchToProps = dispatch =>({
@@ -65,6 +97,7 @@ const mapDispatchToProps = dispatch =>({
     _updateDebtorsList: list => dispatch(updateDebtorsList(list)),
     _updateTableInputValues : objectValues => dispatch(updateTableInputValues(objectValues)),
     _setTableInputValues : objectValues => dispatch(setTableInputValues(objectValues)),
+    _setRowEdit : id => dispatch(setRowEdit(id)),
 });
 
 export default connect(mapStateToProps,mapDispatchToProps)(InputActions);
