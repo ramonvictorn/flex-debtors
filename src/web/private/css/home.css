@@ -1,0 +1,49 @@
+.input{
+    width: 100%;
+}
+
+.select {
+    z-index: 999;
+    position: relative;
+}
+
+.headTable{
+    background-color: blue;
+    font-size: 19px;
+    height: 80px;
+}
+.headTable td{
+    width: 150px;
+    height: 50px;
+    border: 2px solid #cdcdcd
+}
+
+.inputCustom{
+    border: 0;
+    outline: 0;
+    border-bottom: 1px solid blue;
+    font-size: 10px;
+}
+
+
+/* .tableStyle tbody tr{
+    /* background-color: #e0e0e0; */
+/* } */ */
+.tableStyle tbody tr td{
+    width: 150px
+
+}
+table {
+    border-spacing: 0;
+    text-align: center;
+}
+
+.tableStyle{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.notediting{
+    background: red;
+}

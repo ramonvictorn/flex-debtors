@@ -1,21 +1,20 @@
-const getDebitsModel = require('../models/getDebts.js');
-module.exports = getDebts;
-function getDebts(req,res){
-    if(!verifyParams(req.query)){
+const deleteDebtModel = require('../models/deleteDebt.js');
+module.exports = deleteDebt;
+function deleteDebt(req,res){
+    if(!verifyParams(req.body)){
         return res.status(400).send({error:'INVALID_PARAMS'})
     }
     let context = {
-        idUser : parseInt(req.query.idUser),
+        idDebtor: req.body.idDebtor,
     }
 
-    getDebitsModel(context,(dataReturned)=>{
+    deleteDebtModel(context,(dataReturned)=>{
         if(dataReturned.error){
             res.status(400).send({error:dataReturned.error})
         }else{
             res.status(200).send({data:dataReturned.data})
         }
     })
-
 }
 
 /**
@@ -23,6 +22,6 @@ function getDebts(req,res){
  * @param {object} params - Params to verify
  */
 function verifyParams(params){
-    if(isNaN(params.idUser)) return false;
+    if(isNaN(params.idDebtor)) return false;
     return true;
 }

@@ -1,11 +1,21 @@
 const request = require('request');
 module.exports = getUsers;
 function getUsers(req,res){ 
-    request('https://jsonplaceholder.typicode.com/users', function (error, response, body) {
-        console.error('error:', error); // Print the error if one occurred
-        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        console.log('body:', body); // Print the HTML for the Google homepage.
-        res.send(body)
+    const options = {
+        url: 'https://jsonplaceholder.typicode.com/users',
+        method:'GET',
+        headers: {
+            'User-Agent': 'request'
+        }
+    };
+    request(options, (error, response, body) => {
+        if (!error && response.statusCode == 200) {
+            let content = JSON.parse(body); // Print the HTML for the Google homepage.
+            res.send({data:content})
+        }else{
+            console.log('error ', error)
+            return res.status(400).send({error:"Error_on_get_users"});
+        }
     });
     
 }

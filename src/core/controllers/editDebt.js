@@ -1,25 +1,23 @@
-const addDebitsModel = require('../models/addDebts.js');
-module.exports = addDebts;
-function addDebts(req,res){
+const editDebtModel = require('../models/editDebt.js');
+module.exports = editDebt;
+function editDebt(req,res){
     if(!verifyParams(req.body)){
         return res.status(400).send({error:'INVALID_PARAMS'})
     }
     let context = {
-        idUser : req.body.idUser,
-        value: req.body.value,
+        idDebtor: req.body.idDebtor,
         reason: req.body.reason,
-        details: {},
-        dateDebtor:req.body.dateDebtor,
+        value: req.body.value,
+        dateDebtor: req.body.dateDebtor,
     }
 
-    addDebitsModel(context,(dataReturned)=>{
+    editDebtModel(context,(dataReturned)=>{
         if(dataReturned.error){
             res.status(400).send({error:dataReturned.error})
         }else{
             res.status(200).send({data:dataReturned.data})
         }
     })
-
 }
 
 /**
@@ -27,8 +25,7 @@ function addDebts(req,res){
  * @param {object} params - Params to verify
  */
 function verifyParams(params){
-    if(isNaN(params.idUser) || isNaN(params.value)) return false;
-    if(typeof params.reason != 'string') return false;
-    if(params.dateDebtor == undefined) return false;
+    if(isNaN(params.idDebtor)) return false;
+    if(typeof params.reason != 'string' && params.value == undefined && params.dateDebtor == undefined) return false;
     return true;
 }
