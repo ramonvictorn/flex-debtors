@@ -1,7 +1,6 @@
 const addDebitsModel = require('../models/addDebts.js');
 module.exports = addDebts;
 function addDebts(req,res){
-    console.log('addDebts body ->', req.body, typeof req.body.reason)
     if(!verifyParams(req.body)){
         return res.status(400).send({error:'INVALID_PARAMS'})
     }

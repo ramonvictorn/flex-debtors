@@ -1,7 +1,6 @@
 import React,{Component} from 'react';
 import Select from 'react-select';
 import { connect } from 'react-redux';
-// import { AccessAlarm, ThreeDRotation } from '@material-ui/icons';
 import Icon from '@material-ui/core/Icon';
 import {
     updateDebtorsList,
@@ -21,8 +20,6 @@ class ListDebts extends Component{
     }
     delete(id){
         let me = this;
-        // console.log('array Before ajax', this.props.debtorsList);
-        // console.log('delete ', id);
         let data = {
             idDebtor : id,
         }
@@ -31,15 +28,10 @@ class ListDebts extends Component{
             type:"DELETE",
 			data: data,
           }).done(function(ret) {
-            //   console.log('ret do delete ', ret)
               me.removeDebtArray(ret.data.idDebtor)
-            //   me.props._updateDebtorsList(me.props.debtorsList.concat(ret.data))
-            //   me.props._toggleRowEdit();
           });
     }
     editDebt(idDebt,index){
-        // console.log('editDebt ', idDebt, 'e index ->', index);
-        // console.log('com essas info', this.props.debtorsList[index])
         this.setState({edit:idDebt})
         let dataParams = {
             reason : this.props.debtorsList[index].reason,
@@ -47,38 +39,27 @@ class ListDebts extends Component{
             dateDebtor: this.props.debtorsList[index].dateDebtor.split('T')[0],
         };
         this.props._setTableInputValues(dataParams);
-        // this.props._updateTableInputValues(dataParams)
         this.props._setRowEdit(idDebt);
 
     }
     removeDebtArray(idDebt){
-        // console.log('removeDebtArray -> idDebt', idDebt)
         let newArray = [];
         let tempArray = this.props.debtorsList.slice(0);
-    
-        // console.log('array Before', JSON.stringify(tempArray));
         this.props.debtorsList.forEach((element,index) => {
-            // console.log('looping remove',element.idDebtor , 'params é' , idDebt)
             if(element.idDebtor == idDebt){
-                // console.log('deu true ', index, tempArray.length);
-                // newArray = this.props.debtorsList.splice(index+1);
                 tempArray.splice(index,1)
             }
         });
-        // console.log('array after', JSON.stringify(tempArray));
         this.props._updateDebtorsList(tempArray);
     }
     addNewRegistry(){
-        // console.log('addNewRegistry', this.props);
         this.props._toggleRowEdit();
     }
     render(){
-        console.log('listDebts render - list',this.props.debtorsList);
         let lines = [];
         let notFound = '';
         if(this.props.debtorsList){
             this.props.debtorsList.forEach((element,index) => {
-                // console.log('looping, element ->', element.idDebtor, 'edit props ', this.props.idEdit);
                 lines.push(
                     this.props.idEdit == element.idDebtor 
                     ?   <InputActions key={element.idDebtor}></InputActions>
@@ -101,9 +82,8 @@ class ListDebts extends Component{
         lines.length == 0 ? notFound = "Nenhuma divída encontrada" : '';
         let inputAc = this.props.rowEdit ? <InputActions></InputActions> : <tr></tr>
         let disable = this.props.idEdit != undefined ? 'true' : 'false';
-        console.log('idEdit ', this.props.idEdit)
-        let btNewClass = this.props.idEdit != undefined ? 'editing' : 'notEding2';
-        let btNewTxt = "Novo Cadastro";
+        let btNewClass = this.props.rowEdit ? 'notediting' : 'editing';
+        let btNewTxt = this.props.rowEdit ? "Cancelar" : "Novo Cadastro";
         return(
             <React.Fragment>
                 <table border="1" className={'tableStyle'}>
@@ -113,7 +93,7 @@ class ListDebts extends Component{
                             <td>Valor </td>
                             <td>Data</td>
                             <td>Ações</td>
-                            <td  onClick={()=>{this.addNewRegistry()}}><h2 className={btNewClass}>{btNewTxt}</h2></td></tr>
+                            <td className={btNewClass} onClick={()=>{this.addNewRegistry()}}><h2 className={btNewClass}>{btNewTxt}</h2></td></tr>
                         {lines}
                         {inputAc}
 

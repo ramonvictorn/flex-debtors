@@ -37,7 +37,6 @@ class ListClients extends Component{
           });
     }
     render(){
-        console.log('render ListClients')
         let options = [];
         if(this.props.usersList != null){
             this.props.usersList.forEach(element => {

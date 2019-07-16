@@ -10,6 +10,7 @@
 .headTable{
     background-color: blue;
     font-size: 19px;
+    height: 80px;
 }
 .headTable td{
     width: 150px;
@@ -41,4 +42,8 @@ table {
     display: flex;
     justify-content: center;
     flex-direction: row;
+}
+
+.notediting{
+    background: red;
 }

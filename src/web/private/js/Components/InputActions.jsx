@@ -28,7 +28,6 @@ class InputActions extends Component{
             type:"POST",
 			data: data,
           }).done(function(ret) {
-            //   console.log('ret ', ret)
               me.props._updateDebtorsList(me.props.debtorsList.concat(ret.data))
               me.props._toggleRowEdit();
           });
@@ -54,24 +53,16 @@ class InputActions extends Component{
             type:"PUT",
 			data: data,
           }).done(function(ret) {
-              console.log('ret DO PUT ', ret);
-              console.log('vou procupar pela id ', data.idDebtor)
-              console.log('vou mexer no ->', JSON.stringify(me.props.debtorsList))
               me.props.debtorsList.forEach((element,index) => {
                 if(element.idDebtor == ret.data.idDebtor){
-                    console.log('if do put deu true', JSON.stringify(OldArray[index]));
                     OldArray[index] = ret.data;
-                    // console.log('o el ficou ', JSON.stringify(element))
                 }
               });
               me.props._setRowEdit(undefined);
               me.props._updateDebtorsList(OldArray);
-            //   me.props._toggleRowEdit();
-            console.log('oldArray ->', JSON.stringify(OldArray))
           });
     }
     render(){
-        console.log('InputAction render ', this.props)
         return(
             <tr>
                 <td>{<input className={'inputCustom'}  onChange={(e)=>{this.updateValuesState(e.target.value,'reason')}} type="text" placeholder="Qual o motivo da divída?" value={this.props.inputValues.reason}></input>}</td>
@@ -83,11 +74,9 @@ class InputActions extends Component{
         )
     }  
 }
-// updateDataRow
-// export default InputActions;
+
 const mapStateToProps = state => ({
     userSelected: state.usersReducer.userSelected,
-    // usersList: state.usersReducer.usersList,
     debtorsList: state.debtorsReducer.debtorsList,
     rowEdit : state.debtorsReducer.rowEdit,
     inputValues: state.debtorsReducer.inputValues,

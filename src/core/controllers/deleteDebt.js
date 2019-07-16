@@ -23,7 +23,5 @@ function deleteDebt(req,res){
  */
 function verifyParams(params){
     if(isNaN(params.idDebtor)) return false;
-    // if(typeof params.reason != 'string') return false;
-    // if(params.dateDebtor == undefined) return false;
     return true;
 }

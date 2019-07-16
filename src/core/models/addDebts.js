@@ -9,7 +9,7 @@ function addDebts(context,cb){
         context.details,
         context.dateDebtor,
     ];  
-    // extract(epoch from u.date_inserted)*1000 as "dateInserted
+    
     let queryString = `INSERT INTO debtors
             (id_user,reason,value,details,date_debtor,date_inserted)
         VALUES

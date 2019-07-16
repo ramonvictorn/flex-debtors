@@ -4,13 +4,8 @@ function deleteDebt(context,cb){
     let queryWhere = ``;
     let queryValues = [
         context.idDebtor,
-        // context.idUser,
-        // context.reason,
-        // context.value,
-        // context.details,
-        // context.dateDebtor,
     ];  
-    // extract(epoch from u.date_inserted)*1000 as "dateInserted
+
     let queryString = `DELETE FROM debtors
             WHERE
             id_debtor = $1

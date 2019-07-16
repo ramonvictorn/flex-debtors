@@ -10,7 +10,6 @@ class FormDebts extends Component {
         super();
     }
     render(){
-        console.log('FormDebts render ');
         let disable = this.props.userSelected != null ? false : true;
         return(
             <React.Fragment>
@@ -23,10 +22,8 @@ class FormDebts extends Component {
                     <TextField
                         disabled={disable}
                         id="date"
-                        // label="Birthday"
                         type="date"
                         defaultValue={new Date().toISOString().split('T')[0]}
-                        // className={classes.textField}
                         InputLabelProps={{
                         shrink: true,
                         }}
@@ -40,16 +37,9 @@ class FormDebts extends Component {
         )
     }
 }
-// export default FormDebts;
 
 const mapStateToProps = state => ({
-    // usersList: state.usersReducer.usersList,
     userSelected: state.usersReducer.userSelected,
 });
-
-// const mapDispatchToProps = dispatch =>({
-//     _updateUsersList: users => dispatch(updateUsersList(users)),
-//     _setUserSelected: user => dispatch(setUserSelected(user))
-// });
 
 export default connect(mapStateToProps)(FormDebts);

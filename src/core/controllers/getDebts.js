@@ -1,7 +1,6 @@
 const getDebitsModel = require('../models/getDebts.js');
 module.exports = getDebts;
 function getDebts(req,res){
-    console.log('paras ', req.query)
     if(!verifyParams(req.query)){
         return res.status(400).send({error:'INVALID_PARAMS'})
     }
